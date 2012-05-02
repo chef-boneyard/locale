@@ -17,9 +17,24 @@
 # limitations under the License.
 #
 
-template "/etc/default/locale" do
-  source "locale.erb"
-  mode "644"
-  variables( :lang => node[:locale][:lang] )
-  action :create_if_missing
+if platform?("ubuntu", "debian")
+
+  package "locales" do
+    action :install
+  end
+
+  execute "Update locale" do
+    command "update-locale LANG=#{node[:locale][:lang]}"
+    action :nothing
+  end
+
 end
+
+if platform?("ubuntu", "redhat", "centos", "fedora")
+
+  execute "Update locale" do
+    command "locale -a | grep ^#{node[:locale][:lang]}$ && sed -i 's|LANG=.*|LANG=#{node[:locale][:lang]}|' /etc/sysconfig/i18n"
+  end
+
+end
+
