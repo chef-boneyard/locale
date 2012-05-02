@@ -7,9 +7,9 @@ You can see which languages are available by
 $ locale -a 
 
 On debian based systems you can set the locale by running
-# update-locale LANG={lang}
+ update-locale LANG={lang}
 e.g.
-# update-locale LANG=en_AU.utf8
+ update-locale LANG=en_AU.utf8
 
 It updates the file /etc/default/locale
 
