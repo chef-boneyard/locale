@@ -25,7 +25,6 @@ if platform?("ubuntu", "debian")
 
   execute "Update locale" do
     command "update-locale LANG=#{node[:locale][:lang]}"
-    action :nothing
   end
 
 end
