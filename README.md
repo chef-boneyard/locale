@@ -36,6 +36,8 @@ Attributes
 ==========
 
 * `node[:locale][:lang]` -- defaults to "en_US.utf8"
+* `node[:locale][:language]` -- defaults to "en_US:"
+* `node[:locale][:lc_all]` -- defaults to "en_US.utf8"
 
 Usage
 =====
