@@ -25,6 +25,7 @@ if platform?("ubuntu", "debian")
 
   execute "Update locale" do
     command "update-locale LANG=#{node[:locale][:lang]}"
+    not_if "cat /etc/default/locale | grep -qx LANG=#{node[:locale][:lang]}"
   end
 
 end
@@ -32,7 +33,8 @@ end
 if platform?("redhat", "centos", "fedora")
 
   execute "Update locale" do
-    command "locale -a | grep ^#{node[:locale][:lang]}$ && sed -i 's|LANG=.*|LANG=#{node[:locale][:lang]}|' /etc/sysconfig/i18n"
+    command "locale -a | grep -qx #{node[:locale][:lang]} && sed -i 's|LANG=.*|LANG=#{node[:locale][:lang]}|' /etc/sysconfig/i18n"
+    not_if "grep -qx LANG=#{node[:locale][:lang]} /etc/sysconfig/i18n"
   end
 
 end
