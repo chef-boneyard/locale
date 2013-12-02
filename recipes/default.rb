@@ -32,7 +32,12 @@ end
 
 if platform?("redhat", "centos", "fedora")
   
-  file "/etc/sysconfig/i18n"
+  file "/etc/sysconfig/i18n" do
+    content "LANG=\"#{node[:locale][:lang]}\""
+    not_if do
+      File.exists?("/etc/sysconfig/i18n")
+    end
+  end
   
   execute "Update locale" do
     command "locale -a | grep -qx #{node[:locale][:lang]} && sed -i 's|LANG=.*|LANG=#{node[:locale][:lang]}|' /etc/sysconfig/i18n"
