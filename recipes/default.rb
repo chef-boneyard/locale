@@ -33,7 +33,7 @@ end
 if platform?("redhat", "centos", "fedora")
   
   file "/etc/sysconfig/i18n" do
-    content "LANG=\"#{node[:locale][:lang]}\""
+    content "LANG=#{node[:locale][:lang]}"
     not_if do
       File.exists?("/etc/sysconfig/i18n")
     end
