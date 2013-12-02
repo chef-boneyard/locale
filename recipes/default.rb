@@ -31,7 +31,9 @@ if platform?("ubuntu", "debian")
 end
 
 if platform?("redhat", "centos", "fedora")
-
+  
+  file "/etc/sysconfig/i18n"
+  
   execute "Update locale" do
     command "locale -a | grep -qx #{node[:locale][:lang]} && sed -i 's|LANG=.*|LANG=#{node[:locale][:lang]}|' /etc/sysconfig/i18n"
     not_if "grep -qx LANG=#{node[:locale][:lang]} /etc/sysconfig/i18n"
