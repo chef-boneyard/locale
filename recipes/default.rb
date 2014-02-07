@@ -20,7 +20,8 @@
 lang = node[:locale][:lang]
 lc_all = node[:locale][:lc_all]
 
-if platform?("ubuntu", "debian")
+case node['platform']
+when 'debian', 'ubuntu'
 
   package "locales" do
     action :install
@@ -31,10 +32,7 @@ if platform?("ubuntu", "debian")
     not_if { Locale.up_to_date?("/etc/default/locale", lang, lc_all) }
   end
 
-end
-
-if platform?("redhat", "centos", "fedora")
-
+when 'redhat', 'centos', 'scientific', 'amazon'
   locale_file_path = "/etc/sysconfig/i18n"
 
   file locale_file_path do
@@ -48,4 +46,14 @@ if platform?("redhat", "centos", "fedora")
     not_if { Locale.up_to_date?(locale_file_path, lang, lc_all) }
   end
 
+when 'fedora'
+  package 'systemd' do
+    action :install
+  end
+
+  # It is not permitted to set LC_ALL in the locale conf file on Fedora.
+  bash 'Update locale' do
+    code "localectl set-locale LANG=${lang}"
+    not_if { Locale.up_to_date?('/etc/locale.conf', lang, nil) }
+  end
 end
