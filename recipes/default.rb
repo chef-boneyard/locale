@@ -18,7 +18,7 @@
 #
 
 lang = node[:locale][:lang]
-lc_all = node[:locale][:lc_all]
+lc_all = node[:locale][:lc_all] || lang
 
 case node['platform']
 when 'debian', 'ubuntu'
