@@ -17,6 +17,9 @@
 # limitations under the License.
 #
 
+lang = node[:locale][:lang]
+lc_all = node[:locale][:lc_all]
+
 if platform?("ubuntu", "debian")
 
   package "locales" do
@@ -24,25 +27,25 @@ if platform?("ubuntu", "debian")
   end
 
   execute "Update locale" do
-    command "update-locale LANG=#{node[:locale][:lang]}"
-    not_if "cat /etc/default/locale | grep -qx LANG=#{node[:locale][:lang]}"
+    command "update-locale LANG=#{lang} LC_ALL=#{lc_all}"
+    not_if { Locale.up_to_date?("/etc/default/locale", lang, lc_all) }
   end
 
 end
 
 if platform?("redhat", "centos", "fedora")
-  
-  file "/etc/sysconfig/i18n" do
-    content "LANG=#{node[:locale][:lang]}"
-    not_if do
-      File.exists?("/etc/sysconfig/i18n")
-    end
-  end
-  
-  execute "Update locale" do
-    command "locale -a | grep -qx #{node[:locale][:lang]} && sed -i 's|LANG=.*|LANG=#{node[:locale][:lang]}|' /etc/sysconfig/i18n"
-    not_if "grep -qx LANG=#{node[:locale][:lang]} /etc/sysconfig/i18n"
+
+  locale_file_path = "/etc/sysconfig/i18n"
+
+  file locale_file_path do
+    content lazy {
+      locale = IO.read(locale_file_path)
+      variables = Hash[locale.lines.map { |line| line.strip.split("=") }]
+      variables["LANG"] = lang
+      variables["LC_ALL"] = lc_all
+      variables.map { |pairs| pairs.join("=") }.join("\n") + "\n"
+    }
+    not_if { Locale.up_to_date?(locale_file_path, lang, lc_all) }
   end
 
 end
-
