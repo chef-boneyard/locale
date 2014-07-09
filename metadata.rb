@@ -1,10 +1,10 @@
-name "locale"
-maintainer       "Heavy Water Software Inc."
-maintainer_email "darrin@heavywater.ca"
+name             "locale"
+maintainer       "Heavy Water Ops, LLC"
+maintainer_email "support@hw-ops.com"
 license          "Apache 2.0"
 description      "Installs/Configures locale"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "1.0.0"
+version          "1.0.1"
 
 supports "ubuntu"
 supports "debian"
