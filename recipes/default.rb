@@ -34,8 +34,16 @@ if platform?("ubuntu", "debian")
 end
 
 if platform?("redhat", "centos", "fedora")
-
   locale_file_path = "/etc/sysconfig/i18n"
+  if platform?('centos', 'redhat') && node['platform_version'].to_f >= 7
+
+    # execute "Update locale" do
+    #   command "localectl set-locale LANG=\"#{lang}\""
+    #   not_if { Locale.up_to_date?("/etc/locale.conf", lang) }
+    # end
+
+    locale_file_path = "/etc/locale.conf"
+  end
 
   file locale_file_path do
     content lazy {
@@ -47,5 +55,4 @@ if platform?("redhat", "centos", "fedora")
     }
     not_if { Locale.up_to_date?(locale_file_path, lang, lc_all) }
   end
-
 end
