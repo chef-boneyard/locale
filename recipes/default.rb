@@ -28,7 +28,7 @@ when 'debian', 'ubuntu'
   end
 
   execute "Generate locale" do
-    command "locale-gen #{lang} #{lc_all}"
+    command "locale-gen #{lang}"
     not_if { Locale.up_to_date?("/etc/default/locale", lang, lc_all) }
   end
 
