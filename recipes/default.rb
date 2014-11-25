@@ -20,8 +20,8 @@
 lang = node[:locale][:lang]
 lc_all = node[:locale][:lc_all] || lang
 
-case node['platform']
-when 'debian', 'ubuntu'
+case node['platform_family']
+when 'debian'
 
   package "locales" do
     action :install
@@ -37,7 +37,7 @@ when 'debian', 'ubuntu'
     not_if { Locale.up_to_date?("/etc/default/locale", lang, lc_all) }
   end
 
-when 'redhat', 'centos', 'scientific', 'amazon'
+when 'rhel'
   locale_file_path = "/etc/sysconfig/i18n"
 
   file locale_file_path do
