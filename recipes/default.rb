@@ -20,8 +20,8 @@
 lang = node[:locale][:lang]
 lc_all = node[:locale][:lc_all] || lang
 
-case node['platform']
-when 'debian', 'ubuntu'
+case node['platform_family']
+when 'debian'
 
   package "locales" do
     action :install
@@ -37,20 +37,27 @@ when 'debian', 'ubuntu'
     not_if { Locale.up_to_date?("/etc/default/locale", lang, lc_all) }
   end
 
-when 'redhat', 'centos', 'scientific', 'amazon'
-  locale_file_path = "/etc/sysconfig/i18n"
+when 'rhel'
+  if node['platform_version'].to_f >= 7.0
+    bash 'Update locale' do
+        user 'root'
+        code "/usr/bin/localectl --no-ask-password set-locale LANG=#{node[:locale][:lang]}"
+        not_if { Locale.up_to_date?('/etc/locale.conf', lang, nil) }
+    end
+  else
+    locale_file_path = "/etc/sysconfig/i18n"
 
-  file locale_file_path do
-    content lazy {
-      locale = IO.read(locale_file_path)
-      variables = Hash[locale.lines.map { |line| line.strip.split("=") }]
-      variables["LANG"] = lang
-      variables["LC_ALL"] = lc_all
-      variables.map { |pairs| pairs.join("=") }.join("\n") + "\n"
-    }
-    not_if { Locale.up_to_date?(locale_file_path, lang, lc_all) }
+    file locale_file_path do
+      content lazy {
+        locale = IO.read(locale_file_path)
+        variables = Hash[locale.lines.map { |line| line.strip.split("=") }]
+        variables["LANG"] = lang
+        variables["LC_ALL"] = lc_all
+        variables.map { |pairs| pairs.join("=") }.join("\n") + "\n"
+      }
+      not_if { Locale.up_to_date?(locale_file_path, lang, lc_all) }
+    end
   end
-
 when 'fedora'
   package 'systemd' do
     action :install
