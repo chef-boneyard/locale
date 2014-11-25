@@ -38,19 +38,26 @@ when 'debian'
   end
 
 when 'rhel'
-  locale_file_path = "/etc/sysconfig/i18n"
+  if node['platform_version'].to_f >= 7.0
+    bash 'Update locale' do
+        user 'root'
+        code "/usr/bin/localectl --no-ask-password set-locale LANG=#{node[:locale][:lang]}"
+        not_if { Locale.up_to_date?('/etc/locale.conf', lang, nil) }
+    end
+  else
+    locale_file_path = "/etc/sysconfig/i18n"
 
-  file locale_file_path do
-    content lazy {
-      locale = IO.read(locale_file_path)
-      variables = Hash[locale.lines.map { |line| line.strip.split("=") }]
-      variables["LANG"] = lang
-      variables["LC_ALL"] = lc_all
-      variables.map { |pairs| pairs.join("=") }.join("\n") + "\n"
-    }
-    not_if { Locale.up_to_date?(locale_file_path, lang, lc_all) }
+    file locale_file_path do
+      content lazy {
+        locale = IO.read(locale_file_path)
+        variables = Hash[locale.lines.map { |line| line.strip.split("=") }]
+        variables["LANG"] = lang
+        variables["LC_ALL"] = lc_all
+        variables.map { |pairs| pairs.join("=") }.join("\n") + "\n"
+      }
+      not_if { Locale.up_to_date?(locale_file_path, lang, lc_all) }
+    end
   end
-
 when 'fedora'
   package 'systemd' do
     action :install
