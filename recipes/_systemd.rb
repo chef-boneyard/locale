@@ -1,5 +1,4 @@
 lang = node['locale']['lang']
-lc_all = node['locale']['lc_all'] || lang
 
 package 'systemd' do
   action :install
