@@ -17,48 +17,45 @@
 # limitations under the License.
 #
 
-lang = node[:locale][:lang]
-lc_all = node[:locale][:lc_all] || lang
+lang = node['locale']['lang']
+lc_all = node['locale']['lc_all'] || lang
 
-case node['platform']
-when 'debian', 'ubuntu'
-
-  package "locales" do
+if File.exist?('/usr/sbin/update-locale')
+  # FIXME: do we really need to install this??!?!
+  package 'locales' do
     action :install
   end
 
-  execute "Generate locale" do
+  execute 'Generate locale' do
     command "locale-gen #{lang}"
-    not_if { Locale.up_to_date?("/etc/default/locale", lang, lc_all) }
+    not_if { Locale.up_to_date?('/etc/default/locale', lang, lc_all) }
   end
 
-  execute "Update locale" do
+  execute 'Update locale' do
     command "update-locale LANG=#{lang} LC_ALL=#{lc_all}"
-    not_if { Locale.up_to_date?("/etc/default/locale", lang, lc_all) }
+    not_if { Locale.up_to_date?('/etc/default/locale', lang, lc_all) }
   end
-
-when 'redhat', 'centos', 'scientific', 'amazon'
-  locale_file_path = "/etc/sysconfig/i18n"
+elsif File.exist?('/usr/bin/localectl')
+  # on systemd settings LC_ALL is (correctly) reserved only for testing and cannot be set globally
+  execute "localectl set-locale LANG=#{lang}" do
+    # RHEL uses /etc/locale.conf
+    not_if { Locale.up_to_date?('/etc/locale.conf', lang, nil) } if File.exist?('/etc/locale.conf')
+    # Ubuntu 16.04 still uses /etc/default/locale
+    not_if { Locale.up_to_date?('/etc/default/locale', lang, nil) } if File.exist?('/etc/default/locale')
+  end
+elsif File.exist?('/etc/sysconfig/i18n')
+  locale_file_path = '/etc/sysconfig/i18n'
 
   file locale_file_path do
     content lazy {
       locale = IO.read(locale_file_path)
-      variables = Hash[locale.lines.map { |line| line.strip.split("=") }]
-      variables["LANG"] = lang
-      variables["LC_ALL"] = lc_all
-      variables.map { |pairs| pairs.join("=") }.join("\n") + "\n"
+      variables = Hash[locale.lines.map { |line| line.strip.split('=') }]
+      variables['LANG'] = lang
+      variables['LC_ALL'] = lc_all
+      variables.map { |pairs| pairs.join('=') }.join("\n") + "\n"
     }
     not_if { Locale.up_to_date?(locale_file_path, lang, lc_all) }
   end
-
-when 'fedora'
-  package 'systemd' do
-    action :install
-  end
-
-  # It is not permitted to set LC_ALL in the locale conf file on Fedora.
-  bash 'Update locale' do
-    code "echo localectl set-locale LANG=#{lang} > /tmp/foo ; localectl set-locale LANG=#{lang} >> /tmp/foo 2>&1"
-    not_if { Locale.up_to_date?('/etc/locale.conf', lang, nil) }
-  end
+else
+  raise 'platform not supported'
 end
