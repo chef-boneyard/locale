@@ -1,14 +1,17 @@
-name             "locale"
-maintainer       "Heavy Water Ops, LLC"
-maintainer_email "support@hw-ops.com"
-license          "Apache 2.0"
-description      "Installs/Configures locale"
+name             'locale'
+maintainer       'Chef Software, Inc.'
+maintainer_email 'cookbooks@chef.io'
+license          'Apache 2.0'
+description      'Installs/Configures locale'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "1.0.3"
+version          '1.0.3'
 
-supports "ubuntu"
-supports "debian"
-supports "centos"
-supports "redhat"
-supports "scientific"
-supports "fedora"
+supports 'ubuntu'
+supports 'debian'
+supports 'centos'
+supports 'redhat'
+supports 'scientific'
+supports 'fedora'
+
+source_url 'https://github.com/chef-cookbooks/activemq' if respond_to?(:source_url)
+issues_url 'https://github.com/chef-cookbooks/activemq/issues' if respond_to?(:issues_url)
