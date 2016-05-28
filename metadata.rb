@@ -12,6 +12,7 @@ supports 'centos'
 supports 'redhat'
 supports 'scientific'
 supports 'fedora'
+supports 'oracle'
 
 source_url 'https://github.com/chef-cookbooks/locale' if respond_to?(:source_url)
 issues_url 'https://github.com/chef-cookbooks/locale/issues' if respond_to?(:issues_url)
