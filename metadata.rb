@@ -16,3 +16,5 @@ supports 'oracle'
 
 source_url 'https://github.com/chef-cookbooks/locale' if respond_to?(:source_url)
 issues_url 'https://github.com/chef-cookbooks/locale/issues' if respond_to?(:issues_url)
+
+chef_version '>= 12.1' if respond_to?(:chef_version)
