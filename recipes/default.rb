@@ -22,11 +22,6 @@ lang = node['locale']['lang']
 lc_all = node['locale']['lc_all'] || lang
 
 if File.exist?('/usr/sbin/update-locale')
-  # FIXME: do we really need to install this??!?!
-  package 'locales' do
-    action :install
-  end
-
   execute 'Generate locale' do
     command "locale-gen #{lang}"
     not_if { Locale.up_to_date?('/etc/default/locale', lang, lc_all) }
