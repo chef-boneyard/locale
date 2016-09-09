@@ -58,5 +58,5 @@ elsif File.exist?('/etc/sysconfig/i18n')
     not_if { Locale.up_to_date?(locale_file_path, lang, lc_all) }
   end
 else
-  raise 'platform not supported'
+  raise "#{node['platform']} platform not supported by the locale cookbook."
 end
