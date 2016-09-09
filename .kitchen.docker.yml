@@ -1,4 +1,3 @@
----
 driver:
   name: dokken
   chef_version: latest
