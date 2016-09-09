@@ -1,6 +1,6 @@
 # locale cookbook
 
-[![Build Status](https://travis-ci.org/chef-cookbooks/locale.svg?branch=master)](http://travis-ci.org/chef-cookbooks/locale) [![Cookbook Version](https://img.shields.io/cookbook/v/locales.svg)](https://supermarket.chef.io/cookbooks/locale)
+[![Build Status](https://travis-ci.org/chef-cookbooks/locale.svg?branch=master)](http://travis-ci.org/chef-cookbooks/locale) [![Cookbook Version](https://img.shields.io/cookbook/v/locale.svg)](https://supermarket.chef.io/cookbooks/locale)
 
 Sets the default system locale for this system. You can see which locales are available by running `locale -a`.
 
