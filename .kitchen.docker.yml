@@ -1,7 +1,6 @@
 driver:
   name: dokken
   privileged: true # because Docker and SystemD/Upstart
-  chef_image: chef/chef
   chef_version: current
 
 transport:
@@ -88,9 +87,9 @@ platforms:
     image: opensuse:13.2
     pid_one_command: /bin/systemd
 
-- name: opensuse-42.1
+- name: opensuse-leap
   driver:
-    image: opensuse:42.1
+    image: opensuse:leap
     pid_one_command: /bin/systemd
 
 suites:
