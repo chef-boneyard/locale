@@ -2,6 +2,13 @@
 
 This file is used to list changes made in each version of the locale cookbook.
 
+## 2.0.1 (2017-03-20)
+
+- Fix the version badge in the readme
+- Testing updates to check for Chef 13 compat
+- Test with Local Delivery and not Rake
+- Add a basic chefspec testing
+
 ## 2.0.0 (2016-09-09)
 
 - Require Chef 12.1
