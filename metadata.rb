@@ -2,7 +2,7 @@ name             'locale'
 maintainer       'Chef Software, Inc.'
 maintainer_email 'cookbooks@chef.io'
 license          'Apache-2.0'
-description      'Installs/Configures locale'
+description      'Configures the system locale on Linux systems'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version '2.0.1'
 
