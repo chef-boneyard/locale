@@ -12,8 +12,9 @@ On RHEL based systems, the recipe operates on the /etc/sysconfig/i18n file direc
 
 ### Platforms
 
-- Debian/Ubuntu
-- RHEL or derivatives
+- Debian / Ubuntu derivatives
+- openSUSE / SUSE Linux Enterprises
+- RHEL/CentOS/Scientific/Amazon/Oracle
 - Fedora
 
 ### Chef
