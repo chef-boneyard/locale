@@ -18,7 +18,7 @@ On RHEL based systems, the recipe operates on the /etc/sysconfig/i18n file direc
 
 ### Chef
 
-- Chef 12.1+
+- Chef 12.7+
 
 ### Cookbooks
 
