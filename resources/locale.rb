@@ -32,15 +32,15 @@ action :update do
 
     execute 'Update locale' do
       command "update-locale LANG=#{new_resource.lang} LC_ALL=#{new_resource.lc_all}"
-      not_if { Locale.up_to_date?('/etc/default/locale', new_resource.lang, new_resource.lc_all) }
+      not_if { up_to_date?('/etc/default/locale', new_resource.lang, new_resource.lc_all) }
     end
   elsif ::File.exist?('/usr/bin/localectl')
     # on systemd settings LC_ALL is (correctly) reserved only for testing and cannot be set globally
     execute "localectl set-locale LANG=#{new_resource.lang}" do
       # RHEL uses /etc/locale.conf
-      not_if { Locale.up_to_date?('/etc/locale.conf', new_resource.lang) } if File.exist?('/etc/locale.conf')
+      not_if { up_to_date?('/etc/locale.conf', new_resource.lang) } if File.exist?('/etc/locale.conf')
       # Ubuntu 16.04 still uses /etc/default/locale
-      not_if { Locale.up_to_date?('/etc/default/locale', new_resource.lang) } if File.exist?('/etc/default/locale')
+      not_if { up_to_date?('/etc/default/locale', new_resource.lang) } if File.exist?('/etc/default/locale')
     end
   elsif ::File.exist?('/etc/sysconfig/i18n')
     locale_file_path = '/etc/sysconfig/i18n'
@@ -53,7 +53,7 @@ action :update do
         variables['LC_ALL'] =
           variables.map { |pairs| pairs.join('=') }.join("\n") + "\n"
       }
-      not_if { Locale.up_to_date?(locale_file_path, new_resource.lang, new_resource.lc_all) }
+      not_if { up_to_date?(locale_file_path, new_resource.lang, new_resource.lc_all) }
     end
   else
     raise "#{node['platform']} platform not supported by the locale cookbook."
