@@ -5,6 +5,9 @@ provisioner:
   name: chef_zero
   deprecations_as_errors: true
 
+verifier:
+  name: inspec
+
 platforms:
   - name: amazonlinux
     driver_config:
@@ -16,6 +19,12 @@ platforms:
   - name: debian-9
   - name: fedora-26
   - name: opensuse-leap-42
+  - name: sles-11-sp2
+    driver:
+      box: chef/sles-11-sp2-x86_64 # private box
+  - name: sles-12-sp1
+    driver:
+      box: chef/sles-12-sp1-x86_64 # private box
   - name: ubuntu-14.04
   - name: ubuntu-16.04
 
@@ -25,3 +34,4 @@ suites:
     attributes:
       locale:
         lc_all: "C"
+        lang: "C"

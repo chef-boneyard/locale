@@ -12,13 +12,14 @@ On RHEL based systems, the recipe operates on the /etc/sysconfig/i18n file direc
 
 ### Platforms
 
-- Debian/Ubuntu
-- RHEL or derivatives
+- Debian / Ubuntu derivatives
+- openSUSE / SUSE Linux Enterprises
+- RHEL/CentOS/Scientific/Amazon/Oracle
 - Fedora
 
 ### Chef
 
-- Chef 12.1+
+- Chef 12.7+
 
 ### Cookbooks
 
@@ -35,11 +36,13 @@ Note that you cannot set "LC_ALL" on Fedora. It is a documented limitation; see 
 
 Include the default recipe in your run list.
 
-## License & Authors
+## Maintainers
 
-**Author:** Cookbook Engineering Team ([cookbooks@chef.io](mailto:cookbooks@chef.io))
+This cookbook is maintained by Chef's Community Cookbook Engineering team. Our goal is to improve cookbook quality and to aid the community in contributing to cookbooks. To learn more about our team, process, and design goals see our [team documentation](https://github.com/chef-cookbooks/community_cookbook_documentation/blob/master/COOKBOOK_TEAM.MD). To learn more about contributing to cookbooks like this see our [contributing documentation](https://github.com/chef-cookbooks/community_cookbook_documentation/blob/master/CONTRIBUTING.MD), or if you have general questions about this cookbook come chat with us in #cookbok-engineering on the [Chef Community Slack](http://community-slack.chef.io/)
 
-**Copyright:** 2016, Chef Software, Inc.
+## License
+
+**Copyright:** 2016-2018, Chef Software, Inc.
 
 ```
 Licensed under the Apache License, Version 2.0 (the "License");

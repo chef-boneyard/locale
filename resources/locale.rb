@@ -3,7 +3,7 @@
 # Resource:: locale
 #
 # Copyright:: 2011-2016, Heavy Water Software Inc.
-# Copyright:: 2016, Chef Software Inc.
+# Copyright:: 2016-2018, Chef Software Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,29 +18,31 @@
 # limitations under the License.
 #
 
-property lang, String, default: 'en_US.utf8'
-property lc_all, String, default: 'en_US.utf8'
+resource_name :locale
+
+property :lang, String, default: 'en_US.utf8'
+property :lc_all, String, default: 'en_US.utf8'
 
 action :update do
-  if File.exist?('/usr/sbin/update-locale')
+  if node['init_package'] == 'systemd'
+    # on systemd settings LC_ALL is (correctly) reserved only for testing and cannot be set globally
+    execute "localectl set-locale LANG=#{new_resource.lang}" do
+      # RHEL uses /etc/locale.conf
+      not_if { up_to_date?('/etc/locale.conf', new_resource.lang) } if ::File.exist?('/etc/locale.conf')
+      # Ubuntu 16.04 still uses /etc/default/locale
+      not_if { up_to_date?('/etc/default/locale', new_resource.lang) } if ::File.exist?('/etc/default/locale')
+    end
+  elsif ::File.exist?('/usr/sbin/update-locale')
     execute 'Generate locale' do
       command "locale-gen #{new_resource.lang}"
-      not_if { Locale.up_to_date?('/etc/default/locale', new_resource.lang, new_resource.lc_all) }
+      not_if { up_to_date?('/etc/default/locale', new_resource.lang, new_resource.lc_all) }
     end
 
     execute 'Update locale' do
       command "update-locale LANG=#{new_resource.lang} LC_ALL=#{new_resource.lc_all}"
-      not_if { Locale.up_to_date?('/etc/default/locale', new_resource.lang, new_resource.lc_all) }
+      not_if { up_to_date?('/etc/default/locale', new_resource.lang, new_resource.lc_all) }
     end
-  elsif File.exist?('/usr/bin/localectl')
-    # on systemd settings LC_ALL is (correctly) reserved only for testing and cannot be set globally
-    execute "localectl set-locale LANG=#{new_resource.lang}" do
-      # RHEL uses /etc/locale.conf
-      not_if { Locale.up_to_date?('/etc/locale.conf', new_resource.lang) } if File.exist?('/etc/locale.conf')
-      # Ubuntu 16.04 still uses /etc/default/locale
-      not_if { Locale.up_to_date?('/etc/default/locale', new_resource.lang) } if File.exist?('/etc/default/locale')
-    end
-  elsif File.exist?('/etc/sysconfig/i18n')
+  elsif ::File.exist?('/etc/sysconfig/i18n')
     locale_file_path = '/etc/sysconfig/i18n'
 
     file locale_file_path do
@@ -51,7 +53,7 @@ action :update do
         variables['LC_ALL'] =
           variables.map { |pairs| pairs.join('=') }.join("\n") + "\n"
       }
-      not_if { Locale.up_to_date?(locale_file_path, new_resource.lang, new_resource.lc_all) }
+      not_if { up_to_date?(locale_file_path, new_resource.lang, new_resource.lc_all) }
     end
   else
     raise "#{node['platform']} platform not supported by the locale cookbook."
