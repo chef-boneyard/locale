@@ -4,6 +4,7 @@ driver:
 provisioner:
   name: chef_zero
   deprecations_as_errors: true
+  require_chef_omnibus: <%= ENV['CHEF_VERSION'] || 'latest' %>
 
 verifier:
   name: inspec
@@ -30,8 +31,4 @@ platforms:
 
 suites:
   - name: default
-    run_list: locale::default
-    attributes:
-      locale:
-        lc_all: "C"
-        lang: "C"
+    run_list: test::default
