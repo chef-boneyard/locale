@@ -2,6 +2,11 @@
 
 This file is used to list changes made in each version of the locale cookbook.
 
+## 2.1.0 (tbc)
+
+- Add a custom resource for locale
+- Change bats testing for inspec
+
 ## 2.0.1 (2017-03-20)
 
 - Fix the version badge in the readme
