@@ -11,17 +11,9 @@ function setup {
     [ "$LANG" = "en_US.utf8" ]
 }
 
-<<<<<<< HEAD
 @test "LC_ALL should be empty" {
     if [ -f /etc/locale.conf ] ; then
         skip "LC_ALL cannot be set globally on Fedora"
     fi
     [ "$LC_ALL" = "" ]
-=======
-@test "LC_ALL should be C" {
-    if [ -f /etc/locale.conf ] ; then
-        skip "LC_ALL cannot be set globally on Fedora"
-    fi
-    [ "$LC_ALL" = "C" ]
->>>>>>> inspec --> bats?
 }
