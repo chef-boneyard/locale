@@ -6,9 +6,6 @@ provisioner:
   deprecations_as_errors: true
   require_chef_omnibus: <%= ENV['CHEF_VERSION'] || 'latest' %>
 
-verifier:
-  name: bats
-
 platforms:
   - name: amazonlinux
     driver_config:
