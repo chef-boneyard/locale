@@ -6,13 +6,9 @@ description      'Configures the system locale on Linux systems'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version '2.0.1'
 
-supports 'ubuntu'
-supports 'debian'
-supports 'centos'
-supports 'redhat'
-supports 'scientific'
-supports 'fedora'
-supports 'oracle'
+%w(amazon centos debian fedora opensuse opensuseleap oracle redhat scientific suse ubuntu zlinux).each do |os|
+  supports os
+end
 
 source_url 'https://github.com/chef-cookbooks/locale'
 issues_url 'https://github.com/chef-cookbooks/locale/issues'
