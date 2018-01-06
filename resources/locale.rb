@@ -14,25 +14,17 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific slanguage governing permissions and
+# See the License for the specific language governing permissions and
 # limitations under the License.
 #
 
-resource_name :locale
-
-property :lang, String, default: 'en_US.utf8'
+property :lang,   String, default: 'en_US.utf8'
 property :lc_all, String, default: 'en_US.utf8'
 
+provides :locale
+
 action :update do
-  if node['init_package'] == 'systemd'
-    # on systemd settings LC_ALL is (correctly) reserved only for testing and cannot be set globally
-    execute "localectl set-locale LANG=#{new_resource.lang}" do
-      # RHEL uses /etc/locale.conf
-      not_if { up_to_date?('/etc/locale.conf', new_resource.lang) } if ::File.exist?('/etc/locale.conf')
-      # Ubuntu 16.04 still uses /etc/default/locale
-      not_if { up_to_date?('/etc/default/locale', new_resource.lang) } if ::File.exist?('/etc/default/locale')
-    end
-  elsif ::File.exist?('/usr/sbin/update-locale')
+  if ::File.exist?('/usr/sbin/update-locale')
     execute 'Generate locale' do
       command "locale-gen #{new_resource.lang}"
       not_if { up_to_date?('/etc/default/locale', new_resource.lang, new_resource.lc_all) }
@@ -41,6 +33,14 @@ action :update do
     execute 'Update locale' do
       command "update-locale LANG=#{new_resource.lang} LC_ALL=#{new_resource.lc_all}"
       not_if { up_to_date?('/etc/default/locale', new_resource.lang, new_resource.lc_all) }
+    end
+  elsif ::File.exist?('/usr/bin/localectl')
+    # on systemd settings LC_ALL is (correctly) reserved only for testing and cannot be set globally
+    execute "localectl set-locale LANG=#{new_resource.lang}" do
+      # RHEL uses /etc/locale.conf
+      not_if { up_to_date?('/etc/locale.conf', new_resource.lang) } if ::File.exist?('/etc/locale.conf')
+      # Ubuntu 16.04 still uses /etc/default/locale
+      not_if { up_to_date?('/etc/default/locale', new_resource.lang) } if ::File.exist?('/etc/default/locale')
     end
   elsif ::File.exist?('/etc/sysconfig/i18n')
     locale_file_path = '/etc/sysconfig/i18n'
