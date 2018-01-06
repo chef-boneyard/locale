@@ -20,8 +20,8 @@
 
 resource_name :locale
 
-property lang, String, default: 'en_US.utf8'
-property lc_all, String, default: 'en_US.utf8'
+property :lang, String, default: 'en_US.utf8'
+property :lc_all, String, default: 'en_US.utf8'
 
 action :update do
   if File.exist?('/usr/sbin/update-locale')
