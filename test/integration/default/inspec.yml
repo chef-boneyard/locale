@@ -1,0 +1,9 @@
+name: default
+title: locale_default
+maintainer: Chef Software Inc.
+copyright: Webb Agile Solutions Ltd.
+license: Apache-2.0
+summary: Verifies locale is set
+version: 1.0.0
+supports:
+  - os-family: linux
