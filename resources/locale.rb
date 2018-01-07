@@ -33,8 +33,8 @@ action :update do
       not_if { up_to_date?('/etc/default/locale', new_resource.lang) } if ::File.exist?('/etc/default/locale')
     end
   elsif ::File.exist?('/usr/sbin/update-locale')
-    execute 'Generate locale' do
-      command "locale-gen #{new_resource.lang}"
+    execute 'Generate locales' do
+      command "locale-gen"
       not_if { up_to_date?('/etc/default/locale', new_resource.lang, new_resource.lc_all) }
     end
 
