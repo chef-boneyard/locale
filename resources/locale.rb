@@ -34,7 +34,7 @@ action :update do
     end
   elsif ::File.exist?('/usr/sbin/update-locale')
     execute 'Generate locales' do
-      command "locale-gen"
+      command 'locale-gen'
       not_if { up_to_date?('/etc/default/locale', new_resource.lang, new_resource.lc_all) }
     end
 
