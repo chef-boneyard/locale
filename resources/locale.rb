@@ -24,7 +24,7 @@ property :lang, String, default: 'en_US.utf8'
 property :lc_all, String, default: 'en_US.utf8'
 
 action :update do
-  if node['init_package'] == 'systemd'
+  if node['init_package'] == 'systemd' && ::File.exit?('/usr/bin/localectl')
     # on systemd settings LC_ALL is (correctly) reserved only for testing and cannot be set globally
     execute "localectl set-locale LANG=#{new_resource.lang}" do
       # RHEL uses /etc/locale.conf
