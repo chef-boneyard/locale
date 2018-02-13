@@ -18,10 +18,10 @@
 # limitations under the License.
 #
 
-resource_name :locale
-
 property :lang, String, default: 'en_US.utf8'
 property :lc_all, String, default: 'en_US.utf8'
+
+provides :locale
 
 action :update do
   if node['init_package'] == 'systemd'
