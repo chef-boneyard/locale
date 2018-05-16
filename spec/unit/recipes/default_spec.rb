@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'default recipe on centos 6.8' do
-  let(:runner) { ChefSpec::ServerRunner.new(platform: 'centos', version: '6.8') }
+  let(:runner) { ChefSpec::ServerRunner.new(platform: 'centos', version: '6.9') }
   let(:chef_run) { runner.converge('locale::default') }
 
   it 'converges successfully' do
