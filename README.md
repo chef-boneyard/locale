@@ -21,20 +21,23 @@ On RHEL based systems, the recipe operates on the /etc/sysconfig/i18n file direc
 
 - Chef 12.7+
 
-### Cookbooks
-
-- none
-
-## Attributes
-
-- `node['locale']['lang']` -- the value for "LANG": defaults to "en_US.utf8"
-- `node['locale']['lc_all']` -- the value for "LC_ALL": defaults to "en_US.utf8"
-
-Note that you cannot set "LC_ALL" on Fedora. It is a documented limitation; see "man 5 locale.conf". So this recipe simply ignores LC_ALL for Fedora.
-
 ## Usage
 
-Include the default recipe in your run list.
+- Include the cookbook in your metadata.
+
+```ruby
+locale 'set locale' do
+  lang 'en_gb.utf-8'
+  lc_all 'en_gb.utf-8'
+end
+```
+
+## Properties
+
+name   | type   | default value
+------ | ------ | -------------
+lang   | String | en_US.utf8
+lc_all | String | en_US.utf8
 
 ## Maintainers
 

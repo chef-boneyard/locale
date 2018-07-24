@@ -4,9 +4,7 @@ driver:
 provisioner:
   name: chef_zero
   deprecations_as_errors: true
-
-verifier:
-  name: inspec
+  require_chef_omnibus: <%= ENV['CHEF_VERSION'] || 'latest' %>
 
 platforms:
   - name: amazonlinux
@@ -29,8 +27,4 @@ platforms:
 
 suites:
   - name: default
-    run_list: locale::default
-    attributes:
-      locale:
-        lc_all: "C"
-        lang: "C"
+    run_list: test::default
