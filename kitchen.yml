@@ -4,7 +4,9 @@ driver:
 provisioner:
   name: chef_zero
   deprecations_as_errors: true
-  require_chef_omnibus: <%= ENV['CHEF_VERSION'] || 'latest' %>
+
+verifier:
+  name: inspec
 
 platforms:
   - name: amazonlinux
@@ -24,6 +26,7 @@ platforms:
       box: chef/sles-12-sp1-x86_64 # private box
   - name: ubuntu-14.04
   - name: ubuntu-16.04
+  - name: ubuntu-18.04
 
 suites:
   - name: default
