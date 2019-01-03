@@ -8,6 +8,10 @@ On Debian based systems, this recipe sets the locale by running `update-locale` 
 
 On RHEL based systems, the recipe operates on the /etc/sysconfig/i18n file directly because there is no standard command line tool to change the system locale settings.
 
+## Deprecation
+
+This locale resource is now shipped built-in with Chef 14.5 or later. This cookbook will continue to function with older chef-client releases, but all updates will now be performed directly in the chef-client codebase.
+
 ## Requirements
 
 ### Platforms
